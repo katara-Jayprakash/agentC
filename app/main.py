@@ -1,6 +1,8 @@
 import argparse
 import os
 import sys
+import json
+
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -46,6 +48,34 @@ def main():
         ],
     )
 
+    def parseToJson(objectValue):
+        jsonValue = json.loads(objectValue)
+        return jsonValue
+
+    choice = chat.choices[0]
+    # Check if there's a tool call
+    if choice.message.tool_calls:
+        # Extract the tool call
+        firstToolCall = choice.message.tool_calls[0]
+
+        # Parse the function name
+        tool_Name = firstToolCall.function.name
+        # Parse the arguments
+
+        print("tool_Name", tool_Name)
+        tool_Args = parseToJson(firstToolCall.function.arguments)
+        print("argument value after parsing ", tool_Args)
+
+        # reading a file operation
+        filePath = tool_Args["file_path"]
+        if os.path.exists(filePath):
+            if os.path.isdir(filePath):
+                print("\n".join(os.listdir(filePath)))
+            else:
+                with open(filePath, "r") as f:
+                    print(f.read())
+        else:
+            pass
     if not chat.choices or len(chat.choices) == 0:
         raise RuntimeError("no choices in response")
 
