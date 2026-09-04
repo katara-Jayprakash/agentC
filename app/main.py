@@ -71,7 +71,7 @@ def main():
                 print("\n".join(os.listdir(filePath)))
             else:
                 with open(filePath, "r") as f:
-                    print(f.read())
+                    print(f.read(), end=None)
         else:
             pass
     if not chat.choices or len(chat.choices) == 0:
