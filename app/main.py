@@ -62,9 +62,7 @@ def main():
         tool_Name = firstToolCall.function.name
         # Parse the arguments
 
-        print("tool_Name", tool_Name)
         tool_Args = parseToJson(firstToolCall.function.arguments)
-        print("argument value after parsing ", tool_Args)
 
         # reading a file operation
         filePath = tool_Args["file_path"]
