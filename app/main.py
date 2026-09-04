@@ -71,7 +71,7 @@ def main():
                 print("\n".join(os.listdir(filePath)))
             else:
                 with open(filePath, "r") as f:
-                    print(f.read(), end=None)
+                    print(f.read(), end="")
         else:
             pass
     if not chat.choices or len(chat.choices) == 0:
@@ -81,7 +81,7 @@ def main():
     print("Logs from your program will appear here!", file=sys.stderr)
 
     # TODO: Uncomment the following line to pass the first stage
-    print(chat.choices[0].message.content)
+    # print(chat.choices[0].message.content)
 
 
 if __name__ == "__main__":
