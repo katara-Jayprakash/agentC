@@ -74,6 +74,10 @@ def main():
                     print(f.read(), end="")
         else:
             pass
+    else:
+        if choice.message.content:
+            print(choice.message.content)
+
     if not chat.choices or len(chat.choices) == 0:
         raise RuntimeError("no choices in response")
 
