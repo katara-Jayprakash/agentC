@@ -1,8 +1,0 @@
-[project]
-name = "codecrafters-claude-code"
-version = "0.1.0"
-requires-python = ">=3.14"
-dependencies = [
-    "openai>=2.15.0",
-    "python-dotenv>=1.2.3",
-]

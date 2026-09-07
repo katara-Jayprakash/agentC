@@ -2,6 +2,7 @@ import argparse
 import os
 import sys
 import json
+import subprocess
 
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -58,6 +59,26 @@ def executingWriteToolCall(arguments: dict):
     return "file content succesfully written"
 
 
+"""
+  what Bash actually does, 
+  it going to complete the 
+"""
+
+
+def executingBashToolCall(arguments: dict):
+    command = arguments["command"]
+
+    result = subprocess.run(
+        command,
+        shell=True,
+        capture_output=True,
+        text=True,
+    )
+
+    output = result.stdout + result.stderr
+    return output
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("-p", required=True)
@@ -106,6 +127,23 @@ def main():
                             "type": "string",
                             "description": "The content to write to the file",
                         },
+                    },
+                },
+            },
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "Bash",
+                "description": "Execute a shell command",
+                "parameters": {
+                    "type": "object",
+                    "required": ["command"],
+                    "properties": {
+                        "command": {
+                            "type": "string",
+                            "description": "The command to execute",
+                        }
                     },
                 },
             },
@@ -163,10 +201,23 @@ def main():
                     {
                         "role": "tool",
                         "tool_call_id": toolCallId,
-                        "content": toolCallResult,
+                        "content": writeToolCallResult,
                     }
                 )
                 print(writeToolCallResult)
+
+            if toolCallFunctionName == "Bash":
+                # Parse the arguments to extract the command
+                bashToolCallResult = executingBashToolCall(jsonArguments)
+                print(bashToolCallResult)
+                toolCallId = tool_Call.id
+                userMessage.append(
+                    {
+                        "role": "tool",
+                        "tool_call_id": toolCallId,
+                        "content": bashToolCallResult,
+                    }
+                )
 
     # You can use print statements as follows for debugging, they'll be visible when running tests.
 
